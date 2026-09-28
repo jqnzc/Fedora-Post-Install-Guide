@@ -1,21 +1,20 @@
-# Fedora Post Installation Guide
-* Standard Fedora Post Installation Guide
-* Version: Fedora 44
-* Things to do after installing Fedora 44
+# Fedora Linux Post Installation Guide (2026)
+* Active: Fedora 44
+* The following is a standard post-installation guide designed to help you setup a new Fedora installation, add RPM Fusion repositories for complete free and non-free software access, install Nvidia drivers and multimedia codecs, install Steam for gaming, etc.
 
-## DNF Configuration
-* Edit your dnf configuration with:
+## Things to do after installing Fedora 44
+
+## DNF Optimization
+* Edit your dnf configuration with `sudo nano /etc/dnf/dnf.conf`
+* Enhance dnf with the parameters you see fit:
 ```
-sudo nano /etc/dnf/dnf.conf
-```
-* Enhance download speed with:
-```
-max_parallel_downloads=10
+max_parallel_downloads=10 # For increasing installation speed (Recommended)
+defaultyes=True # For auto-confirming prompt
+keepcache=True # For avoiding redownload of packages
 ```
 
-## RPM Fusion - Non-free Repositories
-* Fedora has disabled the repositories for a lot of free and non-free .rpm packages by default. Follow this if you want to use non-free software like Steam, Discord, multimedia codecs, etc. As a general rule of thumb it is advised to do this to get access to many mainstream useful programs
-* Enable RPM Fusion for third party repositories with:
+## RPM Fusion
+* Fedora disables many free and non-free .rpm packages by default. To use software like Steam, Discord, multimedia codecs, etc. it is advised to enable RPM Fusion with:
 ```
 sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 ```
@@ -23,14 +22,8 @@ sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-releas
 ```
 sudo dnf install -y rpmfusion-free-appstream-data rpmfusion-nonfree-appstream-data
 ```
-* Update your system with:
-```
-sudo dnf update -y
-```
-* Reboot:
-```
-sudo reboot
-```
+* Update your system with `sudo dnf update -y`
+* Reboot with `sudo reboot`
 
 ## Firmware
 * If your system supports firmware update delivery through LVFS, update your device firmware with:
@@ -62,10 +55,7 @@ flatpak remote-modify --disable fedora
 ```
 
 ## Legacy NVIDIA Drivers
-* Update your system:
-```
-sudo dnf update -y
-```
+* Update your system with `sudo dnf update -y`
 * In case you have a legacy Nvidia GPU (Pascal, Maxwell, Volta, etc.) install 580xx series with:
 ```
 sudo dnf install xorg-x11-drv-nvidia-580xx akmod-nvidia-580xx
@@ -74,15 +64,17 @@ sudo dnf install xorg-x11-drv-nvidia-580xx akmod-nvidia-580xx
 ```
 sudo dnf install xorg-x11-drv-nvidia-580xx-cuda
 ```
+* Wait approximately 5-10 minutes before rebooting as kernel modules get built. Then see if the module was built by checking version with:
+```
+modinfo -F version nvidia
+```
+* Reboot with `sudo reboot`
 
 ## NVIDIA Drivers
-* Update your system:
-```
-sudo dnf update -y
-```
+* Update your system with `sudo dnf update -y`
 * Install Nvidia drivers with:
 ```
-sudo dnf install akmod-nvidia
+sudo dnf install xorg-x11-drv-nvidia akmod-nvidia
 ```
 * Install CUDA support (for AI, graphics rendering, game development, etc.) with:
 ```
@@ -92,10 +84,7 @@ sudo dnf install xorg-x11-drv-nvidia-cuda
 ```
 modinfo -F version nvidia
 ```
-* Reboot:
-```
-sudo reboot
-```
+* Reboot with `sudo reboot`
 
 ## Media Codecs
 * Switch to FFMPEG for proper multimedia codecs with:
