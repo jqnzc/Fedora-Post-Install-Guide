@@ -32,6 +32,24 @@ sudo dnf update -y
 sudo reboot
 ```
 
+## Firmware
+* If your system supports firmware update delivery through LVFS, update your device firmware with:
+```
+fwupdmgr refresh --force
+```
+* List devices with available updates with:
+```
+fwupdmgr get-devices
+```
+* Fetches list of available updates with:
+```
+fwupdmgr get-updates
+```
+* Update with:
+```
+fwupdmgr update
+```
+
 ## Flatpak
 * Fedora doesn't include all non-free flatpaks by default. In-case you forgot to check the "Enable Third Party Repositories" option on initial boot, the command below enables access to all the flathub flatpaks
 * Add complete Flatpak support by installing access to all flathub repositories with:
@@ -44,17 +62,13 @@ flatpak remote-modify --disable fedora
 ```
 
 ## Legacy NVIDIA Drivers
-* In case you have a legacy Nvidia GPU (Pascal, Maxwell, Volta, etc.), you must install a specific driver version with:
+* In case you have a legacy Nvidia GPU (Pascal, Maxwell, Volta, etc.) install 580xx series with:
 ```
 sudo dnf install xorg-x11-drv-nvidia-580xx akmod-nvidia-580xx
 ```
-* Add CUDA support with:
+* Add CUDA 580xx support (sometimes needed for nvidia-smi to work) with:
 ```
 sudo dnf install xorg-x11-drv-nvidia-580xx-cuda
-```
-* In case you intent gaming you must install 32bit support with:
-```
-sudo dnf install xorg-x11-drv-nvidia-580xx-libs.i686 xorg-x11-drv-nvidia-580xx-cuda-libs.i686
 ```
 
 ## NVIDIA Drivers
@@ -69,10 +83,6 @@ sudo dnf install akmod-nvidia
 * Install CUDA support (for AI, graphics rendering, game development, etc.) with:
 ```
 sudo dnf install xorg-x11-drv-nvidia-cuda
-```
-* If you intent gaming, install 32bit libraries with:
-```
-sudo dnf install xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda-libs.i686
 ```
 * Wait approximately 5-10 minutes before rebooting as kernel modules get built. Then see if the module was built by checking version with:
 ```
@@ -96,7 +106,7 @@ sudo dnf update @multimedia --setopt="install_weak_deps=False" --exclude=Package
 ```
 sudo dnf group install -y sound-and-video
 ```
-* Add VA-API video decoding with:
+* Add hardware acceleration VA-API video decoding with:
 ```
 sudo dnf install ffmpeg-libs libva libva-utils
 ```
@@ -122,10 +132,46 @@ sudo dnf config-manager setopt fedora-cisco-openh264.enabled=1
 ```
 * Then, enable OpenH264 in Firefox Settings
 
+## VSCodium
+* Add the repositories with:
+```
+sudo tee -a /etc/yum.repos.d/vscodium.repo << 'EOF'
+[gitlab.com_paulcarroty_vscodium_repo]
+name=gitlab.com_paulcarroty_vscodium_repo
+baseurl=https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/rpms/
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg
+metadata_expire=1h
+EOF
+```
+* Install codium with:
+```
+sudo dnf install codium
+```
+* As found in https://vscodium.com/
+
 ## Steam
 * Install Steam with:
 ```
 sudo dnf install steam
+```
+* 32bit support for legacy Nvidia 580xx drivers:
+```
+sudo dnf install xorg-x11-drv-nvidia-580xx-libs.i686 xorg-x11-drv-nvidia-580xx-cuda-libs.i686
+```
+* 32bit support for Nvidia drivers:
+```
+sudo dnf install xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda-libs.i686
+``` 
+* Recommended environment variables for proper Nvidia GPU usage:
+```
+__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia __VK_LAYER_NV_optimus=NVIDIA_only __GL_THREADED_OPTIMIZATIONS=1 %command%
+```
+* Optional gaming related packages for CPU and GPU control:
+```
+sudo dnf install mangohud goverlay mangohud.i686 goverlay.i686
 ```
 
 ## References
@@ -133,3 +179,4 @@ sudo dnf install steam
 * Fedora 44 Post Install Guide (https://techhut.tv/fedora-44-post-install-guide)
 * Fedora 44 KDE Setup (https://github.com/26zl/fedora-kde-setup)
 * Nvidia on Fedora Desktops (https://github.com/fady-saied/Nvidia-Fedora-Guide)
+* Nvidia Optional Components (https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/optional-components.html)
