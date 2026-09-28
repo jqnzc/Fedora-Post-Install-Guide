@@ -3,6 +3,16 @@
 * Version: Fedora 44
 * Things to do after installing Fedora 44
 
+## DNF Configuration
+* Edit your dnf configuration with:
+```
+sudo nano /etc/dnf/dnf.conf
+```
+* Enhance download speed with:
+```
+max_parallel_downloads=10
+```
+
 ## RPM Fusion - Non-free Repositories
 * Fedora has disabled the repositories for a lot of free and non-free .rpm packages by default. Follow this if you want to use non-free software like Steam, Discord, multimedia codecs, etc. As a general rule of thumb it is advised to do this to get access to many mainstream useful programs
 * Enable RPM Fusion for third party repositories with:
@@ -34,13 +44,17 @@ flatpak remote-modify --disable fedora
 ```
 
 ## Legacy NVIDIA Drivers
-* In case you have a legacy Nvidia GPU (Pascal, etc.), you must install a specific driver version with:
+* In case you have a legacy Nvidia GPU (Pascal, Maxwell, Volta, etc.), you must install a specific driver version with:
 ```
-sudo dnf install akmod-nvidia-580xx
+sudo dnf install xorg-x11-drv-nvidia-580xx akmod-nvidia-580xx
+```
+* Add CUDA support with:
+```
+sudo dnf install xorg-x11-drv-nvidia-580xx-cuda
 ```
 * In case you intent gaming you must install 32bit support with:
 ```
-sudo dnf install
+sudo dnf install xorg-x11-drv-nvidia-580xx-libs.i686 xorg-x11-drv-nvidia-580xx-cuda-libs.i686
 ```
 
 ## NVIDIA Drivers
@@ -58,6 +72,7 @@ sudo dnf install xorg-x11-drv-nvidia-cuda
 ```
 * If you intent gaming, install 32bit libraries with:
 ```
+sudo dnf install xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda-libs.i686
 ```
 * Wait approximately 5-10 minutes before rebooting as kernel modules get built. Then see if the module was built by checking version with:
 ```
@@ -81,6 +96,20 @@ sudo dnf update @multimedia --setopt="install_weak_deps=False" --exclude=Package
 ```
 sudo dnf group install -y sound-and-video
 ```
+* Add VA-API video decoding with:
+```
+sudo dnf install ffmpeg-libs libva libva-utils
+```
+
+## Intel Codecs
+* Install Intel multimedia codecs with:
+```
+sudo dnf swap libva-intel-media-driver intel-media-driver --allowerasing
+```
+* Then:
+```
+sudo dnf install libva-intel-driver
+```
 
 ## OpenH264 for Firefox
 * Access OpenH264 in Firefox with:
@@ -94,3 +123,13 @@ sudo dnf config-manager setopt fedora-cisco-openh264.enabled=1
 * Then, enable OpenH264 in Firefox Settings
 
 ## Steam
+* Install Steam with:
+```
+sudo dnf install steam
+```
+
+## References
+* Fedora 44 Post Install Guide (https://github.com/devangshekhawat/Fedora-44-Post-Install-Guide)
+* Fedora 44 Post Install Guide (https://techhut.tv/fedora-44-post-install-guide)
+* Fedora 44 KDE Setup (https://github.com/26zl/fedora-kde-setup)
+* Nvidia on Fedora Desktops (https://github.com/fady-saied/Nvidia-Fedora-Guide)
