@@ -62,6 +62,10 @@ flatpak remote-modify --disable fedora
 ```
 
 ## Legacy NVIDIA Drivers
+* Update your system:
+```
+sudo dnf update -y
+```
 * In case you have a legacy Nvidia GPU (Pascal, Maxwell, Volta, etc.) install 580xx series with:
 ```
 sudo dnf install xorg-x11-drv-nvidia-580xx akmod-nvidia-580xx
