@@ -150,23 +150,25 @@ sudo dnf install codium
 ```
 sudo dnf install steam
 ```
-* 32bit support for legacy Nvidia 580xx drivers:
-```
-sudo dnf install xorg-x11-drv-nvidia-580xx-libs.i686 xorg-x11-drv-nvidia-580xx-cuda-libs.i686
-```
-* 32bit support for Nvidia drivers:
-```
-sudo dnf install xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda-libs.i686
-``` 
 * Recommended environment variables for proper Nvidia GPU usage:
 ```
 __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia __VK_LAYER_NV_optimus=NVIDIA_only __GL_THREADED_OPTIMIZATIONS=1 %command%
 ```
+* If the game you are playing runs in Vulkan only then you can omit the `__GLX_VENDOR_LIBRARY_NAME=nvidia` and `__GL_THREADED_OPTIMIZATIONS=1` variables
 * Optional gaming related packages for CPU and GPU control:
 ```
-sudo dnf install mangohud goverlay mangohud.i686 goverlay.i686
+sudo dnf install mangohud goverlay
 ```
-
+* You can disable CPU Turbo if your CPU is reaching thermal throttling (eg. 90-95C)
+* Check turbo status with:
+```
+cat /sys/devices/system/cpu/intel_pstate/no_turbo
+```
+* Disable turbo with:
+```
+echo 1 | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo
+```
+* To turn it back on use `echo 0 | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo`, were `disabled=1` and `enabled=0`
 ## References
 * Fedora 44 Post Install Guide (https://github.com/devangshekhawat/Fedora-44-Post-Install-Guide)
 * Fedora 44 Post Install Guide (https://techhut.tv/fedora-44-post-install-guide)
